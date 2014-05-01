@@ -34,24 +34,64 @@ const cat2Y=30;
 var dimPat=30;
 window.addEventListener('load', OnLoad, false);
 
+function addline(name,i,j,stx,sty)
+{
+
+    function addAll(pisica)
+    {
+        if (j == 0 && pisica[i][j] == 1 || ((pisica[i][j] == 1|| pisica[i][j]==2) && (pisica[i][j - 1] == 0 || pisica[i][j - 1] == -1)))
+        canvas.add(makeLine([sty + j * dimPat-4, (i - 1) * dimPat + 0.5 * dimPat-1, sty + j * dimPat-4, i * dimPat + 0.5 * dimPat], 3));
+        if (j == 9 && pisica[i][j] == 1 || ((pisica[i][j] == 1||pisica[i][j] == 5) && (pisica[i][j + 1] == 0||pisica[i][j + 1] == -1)))
+            canvas.add(makeLine([sty + j * dimPat+dimPat, (i - 1) * dimPat + 0.5 * dimPat-1, sty + j * dimPat+dimPat, i * dimPat + 0.5 * dimPat], 3));
+        if (i == 0 && pisica[i][j] == 1 || ((pisica[i][j] == 1||pisica[i][j] == 3||pisica[i][j] == 4) && (pisica[i-1][j] == 0||pisica[i-1][j] == -1)))
+            canvas.add(makeLine([sty + (j-1) * dimPat+0.5*dimPat, i* dimPat-3 , sty + j * dimPat+0.5*dimPat, i * dimPat-3 ], 3));
+        if (i == 11 && pisica[i][j] == 1 || ((pisica[i][j] == 1||pisica[i][j] == 5||pisica[i][j] == 2) && (pisica[i+1][j] == 0 || pisica[i+1][j] == -1)))
+            canvas.add(makeLine([sty + (j-1) * dimPat+0.5*dimPat, (i+1)* dimPat , sty + j * dimPat+0.5*dimPat, (i+1) * dimPat ], 3));
+
+
+    }
+
+    if(name=='cat1')
+        {
+            addAll(pisica1);
+        }
+    if(name=='cat2')
+    {
+        addAll(pisica2);
+    }
+}
 function square(name,i,j,color)
 {   var startX,startY;
     if(name=='cat1')
-        {startX=cat1X;
-        startY=cat1Y;
+        {
+         startX=cat1X;
+         startY=cat1Y;
+         addline(name,i,j,startX,startY);
         }
     if(name=='cat2')
-        {startX=cat2X;
+        {
+        startX=cat2X;
         startY=cat2Y;
+        addline(name,i,j,startX,startY);
         }
     if(color==null)
     {
         color='rgba(255,0,0,0.5)';
+
     }
-    var rect= new fabric.Rect({
-        width: 30, height: 30, left: startY+j*dimPat, top: startX+i*dimPat,
-        fill: color
-    });
+    if(color=='white')
+        var rect= new fabric.Rect({
+            width: dimPat-6, height: dimPat-6, left: startY+j*dimPat+3, top: startX+i*dimPat+3,
+            fill: color
+        });
+    else
+        var rect= new fabric.Rect({
+            width: dimPat, height: dimPat, left: startY+j*dimPat, top: startX+i*dimPat,
+            fill: color
+        });
+
+
+
     rect.i=i;
     rect.j=j;
     rect.cat=name;
@@ -63,36 +103,61 @@ function triangle(name,i,j,angle)
     if(name=='cat1')
         {startX=cat1X;
         startY=cat1Y;
+            addline(name,i,j,startX,startY);
         }
     if(name=='cat2')
         {startX=cat2X;
         startY=cat2Y;
+            addline(name,i,j,startX,startY);
         }
     var points;
     if(angle==0)
-    points = [
+    {points = [
         {x: 0, y: 0},
         {x: dimPat, y: dimPat},
         {x: 0, y: dimPat}
     ];
+        canvas.add(makeLine([startY+j*dimPat-0.5*dimPat,
+            startX+i*dimPat-0.5*dimPat-2,
+            startY+j*dimPat+dimPat-0.5*dimPat,
+            startX+i*dimPat+dimPat-2-0.5*dimPat],4));
+    }
     if(angle==180)
-        points = [
+    {  points = [
             {x: dimPat, y: dimPat},
             {x: dimPat, y: 0},
             {x: 0, y: 0}
         ];
+        canvas.add(makeLine([startY+j*dimPat-0.5*dimPat,
+            startX+i*dimPat-0.5*dimPat-2,
+            startY+j*dimPat+dimPat-0.5*dimPat,
+            startX+i*dimPat+dimPat-2-0.5*dimPat],4));
+    }
+
     if(angle==90)
-        points = [
+    { points = [
             {x: 0, y: 0},
             {x: dimPat, y: 0},
             {x: 0, y: dimPat}
         ];
+        canvas.add(makeLine([startY+j*dimPat-0.5*dimPat,
+            startX+i*dimPat-0.5*dimPat+dimPat,
+            startY+j*dimPat+dimPat-0.5*dimPat,
+            startX+i*dimPat-0.5*dimPat],4));
+    }
+
     if(angle==270)
-        points = [
+    {points = [
             {x: dimPat, y: 0},
             {x: dimPat, y: dimPat},
             {x: 0, y: dimPat}
         ];
+        canvas.add(makeLine([startY+j*dimPat-0.5*dimPat,
+            startX+i*dimPat-0.5*dimPat-6+dimPat,
+            startY+j*dimPat+dimPat-0.5*dimPat,
+            startX+i*dimPat-6-0.5*dimPat],4));
+  }
+
     var trg= new fabric.Polygon(points, {
         left: startY+j*dimPat,
         top: startX+i*dimPat,
@@ -160,11 +225,13 @@ function initCat(pisicaModel,name) {
             }
     return cat1;
 }
-function makeLine(coords) {
+function makeLine(coords, width) {
+    if(width==null)
+    width=1;
     return new fabric.Line(coords, {
         fill: 'grey',
         stroke: 'grey',
-        strokeWidth: 1,
+        strokeWidth: width,
         selectable: false
     });
 }
